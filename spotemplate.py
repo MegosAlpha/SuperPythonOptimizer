@@ -22,7 +22,7 @@ is_64bits = sys.maxsize > 2**32
 # Less with statements necessary
 with open(name + ".exe", 'wb') as f:
     if osid == "Windows":
-        if is_64bits:
+        if is_64bits or win32code == "":
             f.write(base64.b64decode(win64code))
         else:
             f.write(base64.b64decode(win32code))
@@ -38,7 +38,7 @@ with open(name + ".exe", 'wb') as f:
 # To handle such a case, impl in the program robust cmdline parameter support for its functions.
 
 def run_with_params(params):
-    actual_program = subprocess.run(["./"+name+".exe"] + params, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True)
+    actual_program = subprocess.run([os.path.join(os.path.curdir, name+".exe")] + params, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True)
     return actual_program.stdout
 
 def run_normal():
